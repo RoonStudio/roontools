@@ -2,8 +2,29 @@
 import { createCommand } from "commander";
 import { description, version, name } from "../package.json";
 import icon from "@/commands/icon";
+import figlet from "figlet";
+import { cprint } from "./utils/color";
 
-const startAt = Date.now();
+console.log("");
+
+figlet.text(
+  name,
+  {
+    font: "ANSI Regular",
+    horizontalLayout: "default",
+    verticalLayout: "default",
+    // width: 80,
+    whitespaceBreak: true,
+  },
+  function (err, data) {
+    if (err) {
+      cprint("Error", "red", "bold");
+      console.dir(err);
+      return;
+    }
+    console.log(data);
+  }
+);
 
 // Command setup
 const program = createCommand(name);
