@@ -27,11 +27,13 @@
     "figlet": "^1.7.0",
     "inquirer": "^8.2.6",
     "inquirer-search-list": "^1.2.6",
+    "prettier": "^3.2.5",
     "zod": "^3.23.4"
   },
   "devDependencies": {
     "@types/figlet": "^1.5.8",
     "@types/node": "^20.12.7",
+    "@types/prettier": "^3.0.0",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5"
   }
