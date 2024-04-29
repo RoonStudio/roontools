@@ -27,3 +27,11 @@ export function HtmlToJSX(html: string, reactJSX = true) {
   });
   return reactJSX ? transformToReactJSX(jsx) : jsx;
 }
+
+export function toComponentName(icon: string) {
+  return icon
+    .split(/:|-|_/)
+    .filter(Boolean)
+    .map((s) => s[0].toUpperCase() + s.slice(1).toLowerCase())
+    .join("");
+}

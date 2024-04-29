@@ -2,36 +2,45 @@ import { existsSync, writeFileSync } from "fs";
 import { cprint } from "@/utils/color";
 import { getIcon, searchIcons } from "./iconify";
 import inquirer from "inquirer";
-import { HtmlToJSX } from "./utils";
+import { HtmlToJSX, toComponentName } from "./utils";
 import { prettierCode } from "@/utils/prettier";
 
 inquirer.registerPrompt("search-list", require("inquirer-search-list"));
 
-export default async () => {
+export default async (...args: any) => {
   if (!existsSync("./src/components/shared/icons")) {
     cprint("Icons folder not found", "red", "bold");
     process.exit(1);
   }
 
-  const icons = await searchIcons("test");
-
-  const answers = await inquirer.prompt([
-    {
-      type: "search-list",
-      message: "Select icon",
-      name: "icon",
-      choices: icons,
-      transformer: (input, answers) => input + "1" + answers,
-    },
+  const { searchTerm } = await inquirer.prompt([
     {
       type: "input",
-      message: "Name of the icon",
-      name: "name",
+      message: "Search term",
+      name: "searchTerm",
     },
   ]);
 
-  const icon_ref = answers.icon as string;
-  const icon_name = answers.name as string;
+  const icons = await searchIcons(searchTerm);
+
+  const { icon_ref } = await inquirer.prompt([
+    {
+      type: "search-list",
+      message: "Select icon",
+      name: "icon_ref",
+      choices: icons,
+      transformer: (input, answers) => input + "1" + answers,
+    },
+  ]);
+
+  const { icon_name } = await inquirer.prompt([
+    {
+      type: "input",
+      message: "Icon name",
+      name: "icon_name",
+      default: toComponentName(icon_ref.split(":")[1]),
+    },
+  ]);
 
   const svg_icon = await getIcon(icon_ref);
 
