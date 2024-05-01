@@ -1,3 +1,6 @@
+import { cprint } from "@/utils/color";
+import { prettierCode } from "@/utils/prettier";
+
 function transformToReactJSX(jsx: string) {
   const reactJSX = jsx.replace(/(class|(stroke-\w+)|(\w+:\w+))=/g, (i) => {
     if (i === "class=") return "className=";
@@ -34,4 +37,26 @@ export function toComponentName(icon: string) {
     .filter(Boolean)
     .map((s) => s[0].toUpperCase() + s.slice(1).toLowerCase())
     .join("");
+}
+
+export async function svgToReactComponent(svg: string, icon_name: string) {
+  let icon = HtmlToJSX(svg);
+
+  icon = `import { SVGProps } from "react";
+
+export default function ${icon_name}(props: SVGProps<SVGSVGElement>) {
+  return ${icon}
+}
+`;
+
+  icon = icon.replace(/<svg (.*?)>/, "<svg $1 {...props}>");
+
+  try {
+    icon = await prettierCode(icon, "babel-ts");
+  } catch (error) {
+    cprint("Error formatting icon", "red", "bold");
+    process.exit(1);
+  }
+
+  return icon;
 }

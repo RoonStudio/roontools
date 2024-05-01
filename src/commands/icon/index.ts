@@ -2,7 +2,7 @@ import { existsSync, writeFileSync } from "fs";
 import { cprint } from "@/utils/color";
 import { getIcon, searchIcons } from "./iconify";
 import inquirer from "inquirer";
-import { HtmlToJSX, toComponentName } from "./utils";
+import { HtmlToJSX, svgToReactComponent, toComponentName } from "./utils";
 import { prettierCode } from "@/utils/prettier";
 
 inquirer.registerPrompt("search-list", require("inquirer-search-list"));
@@ -44,23 +44,7 @@ export default async (...args: any) => {
 
   const svg_icon = await getIcon(icon_ref);
 
-  let icon = HtmlToJSX(svg_icon);
-
-  icon = `import { SVGProps } from "react";
-
-export default function ${icon_name}(props: SVGProps<SVGSVGElement>) {
-  return ${icon}
-}
-`;
-
-  icon = icon.replace(/<svg (.*?)>/, "<svg $1 {...props}>");
-
-  try {
-    icon = await prettierCode(icon, "babel-ts");
-  } catch (error) {
-    cprint("Error formatting icon", "red", "bold");
-    process.exit(1);
-  }
+  const icon = await svgToReactComponent(svg_icon, icon_name);
 
   const filename = `./src/components/shared/icons/${icon_name}.tsx`;
 

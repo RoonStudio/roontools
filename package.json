@@ -1,8 +1,8 @@
 {
-  "name": "roon-tools",
+  "name": "roontools",
   "version": "1.0.0",
   "description": "A tool made by RoonStudios containing multiple command line utilities to help with development",
-  "repository": "https://github.com/RoonStudio/roon-tools",
+  "repository": "https://github.com/RoonStudio/roontools",
   "author": {
     "name": "AbdoArafh",
     "email": "abdoarafh54@gmail.com",
@@ -14,7 +14,7 @@
     "dev": "tsup src/index.ts --watch"
   },
   "bin": {
-    "roon-tools": "./dist/index.js"
+    "roontools": "./dist/index.js"
   },
   "keywords": [],
   "dependencies": {

@@ -3,9 +3,12 @@ import { createCommand } from "commander";
 import { description, version, name } from "../package.json";
 import icon from "@/commands/icon";
 import figlet from "figlet";
-import { cprint } from "./utils/color";
 
-function main() {
+const APP_BANNER = "ROON TOOLS";
+
+function main(_: any, banner: string) {
+  console.log("\n" + banner);
+
   // Command setup
   const program = createCommand(name);
 
@@ -26,25 +29,14 @@ function main() {
   program.parse();
 }
 
-console.log("");
-
 figlet.text(
-  name,
+  APP_BANNER,
   {
-    font: "ANSI Regular",
+    font: "ANSI Shadow",
     horizontalLayout: "default",
     verticalLayout: "default",
     // width: 80,
     whitespaceBreak: true,
   },
-  function (err, data) {
-    if (err) {
-      cprint("Error", "red", "bold");
-      console.dir(err);
-      return;
-    }
-    console.log(data);
-
-    main();
-  }
+  main
 );
