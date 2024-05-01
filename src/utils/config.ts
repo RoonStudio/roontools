@@ -1,5 +1,5 @@
 import { CONFIG_FILE_NAME } from "@/commands/init";
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 
 export type Config = {
   icons_directory: string;
@@ -12,11 +12,9 @@ const config: Config = {
 };
 
 export const getConfig = () => {
+  if (!existsSync(CONFIG_FILE_NAME)) return config;
+
   const file = readFileSync(CONFIG_FILE_NAME);
 
-  if (file) {
-    return JSON.parse(file.toString()) as Config;
-  }
-
-  return config;
+  return JSON.parse(file.toString()) as Config;
 };

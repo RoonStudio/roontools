@@ -5,7 +5,7 @@ This is a todo list for the project, everyone is free to contribute to completin
 | name                           | assignees | description | status |
 | ------------------------------ | --------- | ----------- | ------ |
 | init sub-command               | AbdoArafh | N/A         | ✅     |
-| writing documentation + README | N/A       | N/A         | ⌛     |
+| writing documentation + README | N/A       | N/A         | ✅     |
 
 ### Status Symbols
 
