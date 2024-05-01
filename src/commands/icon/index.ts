@@ -2,13 +2,15 @@ import { existsSync, writeFileSync } from "fs";
 import { cprint } from "@/utils/color";
 import { getIcon, searchIcons } from "./iconify";
 import inquirer from "inquirer";
-import { HtmlToJSX, svgToReactComponent, toComponentName } from "./utils";
-import { prettierCode } from "@/utils/prettier";
+import { svgToReactComponent, toComponentName } from "./utils";
+import { getConfig } from "@/utils/config";
 
 inquirer.registerPrompt("search-list", require("inquirer-search-list"));
 
-export default async (...args: any) => {
-  if (!existsSync("./src/components/shared/icons")) {
+export default async () => {
+  const config = getConfig();
+
+  if (!existsSync(config.icons_directory)) {
     cprint("Icons folder not found", "red", "bold");
     process.exit(1);
   }
@@ -44,9 +46,13 @@ export default async (...args: any) => {
 
   const svg_icon = await getIcon(icon_ref);
 
-  const icon = await svgToReactComponent(svg_icon, icon_name);
+  const icon = await svgToReactComponent(
+    svg_icon,
+    icon_name,
+    config.components_extension === "tsx"
+  );
 
-  const filename = `./src/components/shared/icons/${icon_name}.tsx`;
+  const filename = `${config.icons_directory}/${icon_name}.${config.components_extension}`;
 
   if (existsSync(filename)) {
     const { prompt } = await inquirer.prompt([
@@ -64,5 +70,5 @@ export default async (...args: any) => {
 
   writeFileSync(filename, icon);
 
-  cprint("Icon created", "green", "bold");
+  cprint("\nIcon created successfully!", "green", "bold");
 };

@@ -39,15 +39,26 @@ export function toComponentName(icon: string) {
     .join("");
 }
 
-export async function svgToReactComponent(svg: string, icon_name: string) {
+export async function svgToReactComponent(
+  svg: string,
+  icon_name: string,
+  is_typescript: boolean = true
+) {
   let icon = HtmlToJSX(svg);
 
-  icon = `import { SVGProps } from "react";
-
-export default function ${icon_name}(props: SVGProps<SVGSVGElement>) {
-  return ${icon}
-}
-`;
+  if (is_typescript) {
+    icon = `import { SVGProps } from "react";
+  
+  export default function ${icon_name}(props: SVGProps<SVGSVGElement>) {
+    return ${icon}
+  }
+  `;
+  } else {
+    icon = `export default function ${icon_name}(props) {
+    return ${icon}
+  }
+  `;
+  }
 
   icon = icon.replace(/<svg (.*?)>/, "<svg $1 {...props}>");
 
